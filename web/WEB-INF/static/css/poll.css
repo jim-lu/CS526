@@ -1,0 +1,65 @@
+/* main content css */
+.filter-container {
+    width: 20%;
+    height: 600px;
+    padding: 20px 0;
+    float: left;
+    background-color: #eee;
+}
+.filter-container h2 {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    text-indent: 20px;
+}
+.filters {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.slots {
+    width: 100%;
+}
+.slots li {
+    min-width: 20%;
+    height: 30px;
+    padding: 0 3%;
+    margin-top: 10px;
+    margin-right: 5%;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    background-color: #fff;
+    float: left;
+    cursor: pointer;
+}
+.slots li:hover {
+    color: #ff9933;
+    background-color: #003366;
+}
+.slots li.active {
+    color: #ff9933;
+    background-color: #003366;
+}
+.reset-button {
+    height: 30px;
+    padding: 0 3%;
+    margin-top: 10px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    outline: none;
+}
+.reset-button:hover {
+    color: #ff9933;
+    background-color: #003366;
+}
+.plot-container {
+    width: 80%;
+    height: 600px;
+    padding: 20px 0;
+    float: left;
+}

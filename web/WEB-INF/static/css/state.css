@@ -1,0 +1,109 @@
+/* main content css */
+.selection {
+    width: 15%;
+    margin: 20px auto;
+    border: 2px solid #003366;
+    border-radius: 5px;
+}
+.selection-button {
+    width: 50%;
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+    float: left;
+    text-align: center;
+}
+.active, .selection-button:hover {
+    color: #ff9933;
+    background-color: #003366;
+}
+/* Shows when the final result comes out */
+.final-result-container {
+    width: 100%;
+}
+.final-result-container h2 {
+    height: 40px;
+    line-height: 40px;
+    font-size: 28px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.left-container, .middle-container, .right-container {
+    width: 33%;
+    float: left;
+}
+.middle-container{
+    background-color: #003366;
+    color: #fff;
+}
+
+/* Shows when the final result doesn't come out */
+.streaming-container {
+    width: 100%;
+    display: none;
+}
+.filter-container {
+    width: 20%;
+    height: 600px;
+    padding: 20px 0;
+    float: left;
+    background-color: #eee;
+}
+.filter-container h2 {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    text-indent: 20px;
+}
+.filters {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.slots {
+    width: 100%;
+}
+.slots li {
+    min-width: 20%;
+    height: 30px;
+    padding: 0 3%;
+    margin-top: 10px;
+    margin-right: 5%;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    background-color: #fff;
+    float: left;
+    cursor: pointer;
+}
+.slots li:hover {
+    color: #ff9933;
+    background-color: #003366;
+}
+.slots li.active {
+    color: #ff9933;
+    background-color: #003366;
+}
+.reset-button {
+    height: 30px;
+    padding: 0 3%;
+    margin-top: 10px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    outline: none;
+}
+.reset-button:hover {
+    color: #ff9933;
+    background-color: #003366;
+}
+.plot-container {
+    width: 80%;
+    height: 600px;
+    padding: 20px 0;
+    float: left;
+}

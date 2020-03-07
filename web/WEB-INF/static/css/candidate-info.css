@@ -1,0 +1,51 @@
+/* main content css */
+.candidate-container {
+	width: 100%;
+	margin-top: 30px;
+	padding: 20px 0;
+}
+.left-container {
+	width: 50%;
+	float: left;
+}
+.right-container {
+	width: 50%;
+	padding-top: 20px;
+	float: left;
+	color: #fff;
+	background-color: #003366;
+}
+.img {
+	width: 50%;
+	height: 200px;
+	float: left;
+}
+.name {
+	width: 50%;
+	height: 170px;
+	float: left;
+	font-weight: bold;
+	font-size: 28px;
+	padding-top: 30px;
+}
+.img img {
+	width: 150px;
+	height: 150px;
+	border-radius: 150px;
+	display: block;
+	margin: 0 auto;
+}
+.intro, .education, .born {
+	width: 80%;
+	margin: 10px auto;
+}
+.plot-container {
+	width: 90%;
+	background-color: #003366;
+}
+.plot-container h2 {
+	font-size: 24px;
+	text-indent: 20px;
+	height: 30px;
+	line-height: 30px;
+}

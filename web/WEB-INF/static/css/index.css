@@ -1,0 +1,66 @@
+/* main content css */
+.candidate-container {
+    margin-top: 30px;
+    padding-top: 20px;
+}
+.candidate-container h2 {
+    height: 40px;
+    line-height: 40px;
+    font-size: 28px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.candidate-container h3 {
+    font-size: 24px;
+    text-align: center;
+}
+.republican-container, .democratic-container {
+    width: 49%;
+    float: left;
+}
+.democratic-container {
+    border-left: 2px solid #ccc;
+}
+.candiate-list {
+    position: relative;
+    width: 100%;
+}
+.candidate {
+    width: 33%;
+    height: 200px;
+    float: left;
+    margin-top: 20px;
+}
+.candidate a {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.candidate img {
+    width: 150px;
+    height: 150px;
+    border-radius: 150px;
+}
+.candidate h4 {
+    text-align: center;
+    font-size: 18px;
+    height: 30px;
+    line-height: 30px;
+}
+.map-container {
+    margin-top: 30px;
+    padding-top: 20px;
+    background-color: #003366;
+}
+.map-container h2 {
+    height: 40px;
+    line-height: 40px;
+    font-size: 28px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ff9933;
+}
