@@ -22,27 +22,27 @@
 .democratic-container {
     border-left: 2px solid #ccc;
 }
-.candiate-list {
+.candidate-list {
     position: relative;
     width: 100%;
 }
 .candidate {
     width: 33%;
-    height: 200px;
     float: left;
     margin-top: 20px;
 }
 .candidate a {
-    width: 150px;
-    height: 150px;
+    width: 85%;
     display: block;
     margin: 0 auto;
     cursor: pointer;
 }
 .candidate img {
-    width: 150px;
-    height: 150px;
-    border-radius: 150px;
+    width: 100%;
+    border-radius: 100%;
+}
+.candidate img.status-0 {
+    opacity: 0.5;
 }
 .candidate h4 {
     text-align: center;
