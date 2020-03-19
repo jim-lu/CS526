@@ -57,6 +57,44 @@
     color: #ff9933;
     background-color: #003366;
 }
+.time-selection {
+    margin-top: 20px;
+}
+.time-selection p {
+    margin-top: 10px;
+}
+.time-selection b {
+    float: right;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 5%;
+}
+.date-picker {
+    width: 70%;
+    border-radius: 5px;
+    float: right;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #cccccc;
+    margin-top: 0;
+}
+.apply-button {
+    height: 30px;
+    padding: 0 3%;
+    margin-top: 10px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    outline: none;
+    float: right;
+}
+.apply-button:hover {
+    color: #ff9933;
+    background-color: #003366;
+}
 .plot-container {
     width: 80%;
     height: 600px;

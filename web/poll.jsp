@@ -15,6 +15,7 @@
     <meta name="author" content="">
 
     <!-- The styles -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style><%@include file="WEB-INF/static/css/common.css"%></style>
     <style><%@include file="WEB-INF/static/css/poll.css"%></style>
 
@@ -30,40 +31,44 @@
             <div class="filters">
                 <h3>Time</h3>
                 <ul class="slots clearfix">
-                    <li>7D</li>
-                    <li>14D</li>
-                    <li>30D</li>
-                    <li>3M</li>
-                    <li>6M</li>
-                    <li>1Y</li>
-                    <li class="active">MAX</li>
+                    <li id="fourteen-day" name="14">14D</li>
+                    <li id="thirty-day" name="30">30D</li>
+                    <li id="three-month" name="90">3M</li>
+                    <li id="six-month" name="180">6M</li>
+                    <li id="one-year" name="365">1Y</li>
+                    <li id="max" class="active" name="Max">MAX</li>
                 </ul>
+                <div class="time-selection clearfix">
+                    <p class="clearfix"><input type="text" class="date-picker" id="from-date"><b>From: </b></p>
+                    <p class="clearfix"><input type="text" class="date-picker" id="to-date"><b>To: </b></p>
+                    <p><span style="color: red; display: none; text-align: right">Date error!</span></p>
+                    <button class="apply-button">APPLY</button>
+                </div>
             </div>
             <div class="filters">
                 <h3>Line</h3>
-                <ul class="slots clearfix">
-                    <li>Approve</li>
-                    <li>Disapprove</li>
-                    <li>Bias</li>
-                    <li class="active">ALL</li>
+                <ul class="slots clearfix" id="line-filters">
+                    <li id="positive-line" name="positive"></li>
+                    <li id="negative-line" name="negative"></li>
+                    <li id="bias-line" name="Bias">Bias</li>
+                    <li id="all-line" class="active" name="All">ALL</li>
                 </ul>
             </div>
             <div class="filters">
-                <button class="reset-button">RESET</button>
+                <button class="reset-button" id="reset-button">RESET</button>
             </div>
         </div>
         <div class="plot-container">
-            <div>There should be a plot look like this.</div>
-            <img src="/img/plot-example1.png" style="width: 80%;" alt="">
         </div>
     </div>
     <div class="footer"></div>
 
     <!-- JS -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script><%@include file="WEB-INF/static/js/jquery.usmap.js"%></script>
-    <script><%@include file="WEB-INF/static/js/index.js"%></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script><%@include file="WEB-INF/static/js/common.js"%></script>
+    <script><%@include file="WEB-INF/static/js/poll.js"%></script>
 </div>
 
 </body>

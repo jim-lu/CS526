@@ -19,20 +19,25 @@
         </div>
         <div class="login-register-box">
             <a>Login</a> |
-            <a>Register</a>
+            <a>Register</a> |
+            <a>Admin</a>
         </div>
     </div>
     <div class="navigation-bar clearfix">
         <div class="navigation-poll">
             <span>POLL</span>
             <ul class="poll-list">
-                <!-- Notes: This part should be dynamically generated -->
+                <li class="poll"><a href="poll.jsp?poll=trumpJobApproval">Trump Job Approval</a></li>
+                <li class="poll"><a href="poll.jsp?poll=congressionalJobApproval">Congressional Job Approval</a></li>
+                <li class="poll"><a href="poll.jsp?poll=directionOfCountry">Direction of Country</a></li>
+                <li class="poll"><a href="poll.jsp?poll=presidentImpeachment">President Impeachment</a></li>
+            </ul>
+        </div>
+        <div class="navigation-nomination">
+            <span>NOMINATION</span>
+            <ul class="nomination-list">
                 <li class="poll"><a>Democratic Primary Polls</a></li>
-                <li class="poll">Republican Primary Polls</li>
-                <li class="poll">General Election Polls</li>
-                <li class="poll"><a href="poll.jsp">Trump Job Approval</a></li>
-                <li class="poll">Direction of Country</li>
-                <!-- End notes -->
+                <li class="poll"><a>Republican Primary Polls</a></li>
             </ul>
         </div>
         <div class="navigation-state">

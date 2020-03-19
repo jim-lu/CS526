@@ -53,6 +53,7 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
   <script><%@include file="WEB-INF/static/js/jquery.usmap.js"%></script>
+  <script><%@include file="WEB-INF/static/js/common.js"%></script>
   <script><%@include file="WEB-INF/static/js/index.js"%></script>
 </div>
 
