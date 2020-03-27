@@ -36,8 +36,8 @@
         <div class="navigation-nomination">
             <span>NOMINATION</span>
             <ul class="nomination-list">
-                <li class="poll"><a>Democratic Primary Polls</a></li>
-                <li class="poll"><a>Republican Primary Polls</a></li>
+                <li class="poll"><a href="nomination.jsp?poll=democraticNomination">Democratic Primary Polls</a></li>
+                <li class="poll"><a href="nomination.jsp?poll=publicanNomination">Republican Primary Polls</a></li>
             </ul>
         </div>
         <div class="navigation-state">

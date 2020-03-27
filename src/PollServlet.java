@@ -75,4 +75,30 @@ public class PollServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
+    public void democraticNomination(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        databaseUtils.connect();
+        JSONArray jsonArray = databaseUtils.executeSql("SELECT * FROM democratic_nomination");
+        databaseUtils.close();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter();
+        out.println(jsonArray);
+        out.flush();
+        out.close();
+    }
+
+    public void publicanNomination(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        databaseUtils.connect();
+        JSONArray jsonArray = databaseUtils.executeSql("SELECT * FROM publican_nomination");
+        databaseUtils.close();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter();
+        out.println(jsonArray);
+        out.flush();
+        out.close();
+    }
 }

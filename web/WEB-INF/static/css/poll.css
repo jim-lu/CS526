@@ -1,7 +1,6 @@
 /* main content css */
 .filter-container {
     width: 20%;
-    height: 600px;
     padding: 20px 0;
     float: left;
     background-color: #eee;
@@ -100,4 +99,14 @@
     height: 600px;
     padding: 20px 0;
     float: left;
+}
+.axis path, .axis line, .y.axis path {
+    stroke: #000;
+    fill: none;
+    shape-rendering: crispEdges;
+}
+.brush .extent {
+    stroke: #fff;
+    fill-opacity: 0.2;
+    shape-rendering: crispEdges;
 }

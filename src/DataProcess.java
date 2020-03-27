@@ -36,11 +36,10 @@ public class DataProcess {
                 Elements columnName = trElements.get(0).select("th");
                 String binaryVal0 = columnName.get(3).text().trim();
                 String binaryVal1 = columnName.get(4).text().trim();
-                org.json.JSONObject obj = getLatestRecord(key, databaseUtils);
-
+                org.json.JSONObject obj = getLatestRecord(key, databaseUtils, "");
                 binaryPollData = new ArrayList<>();
                 int startYear = calendar.get(Calendar.YEAR);
-                processRow(localCache, currentMonth, trElements, obj, null, startYear, binaryPollData, 3, binaryVal0, binaryVal1, null);
+                processRow(localCache, currentMonth, trElements, obj, null, startYear, binaryPollData, 3, binaryVal0, binaryVal1, null, databaseUtils);
                 Collections.reverse(binaryPollData);
                 uploadData(key, binaryPollData, databaseUtils);
                 uploadPollster(newPollster, databaseUtils);
@@ -63,11 +62,10 @@ public class DataProcess {
                 Elements columnName = trElements.get(0).select("th");
                 String candidate0 = columnName.get(4).text().substring(0, columnName.get(4).text().length() - 4);
                 String candidate1 = columnName.get(5).text().substring(0, columnName.get(5).text().length() - 4);
-                org.json.JSONObject obj = getLatestRecord(table, databaseUtils);
-
+                org.json.JSONObject obj = getLatestRecord(table, databaseUtils, "");
                 comparisonPollData = new ArrayList<>();
                 int startYear = calendar.get(Calendar.YEAR);
-                processRow(localCache, currentMonth, trElements, obj, null, startYear, comparisonPollData, 3, candidate0, candidate1, null);
+                processRow(localCache, currentMonth, trElements, obj, null, startYear, comparisonPollData, 3, candidate0, candidate1, null, databaseUtils);
                 Collections.reverse(comparisonPollData);
             }
         }
@@ -87,12 +85,12 @@ public class DataProcess {
             Elements trElements = getTableData(domain + generalPollLink.get(key));
             if (trElements != null) {
                 Elements columnName = trElements.get(0).select("th");
-                org.json.JSONObject obj = getLatestRecord(key, databaseUtils);
+                org.json.JSONObject obj = getLatestRecord(key, databaseUtils, "");
                 List<String> candidateList = new ArrayList<>();
                 for (int i = 3; i < columnName.size() - 1; i ++) candidateList.add(columnName.get(i).text().trim());
                 generalPollData = new ArrayList<>();
                 int startYear = calendar.get(Calendar.YEAR);
-                processRow(localCache, currentMonth, trElements, obj, candidateList, startYear, generalPollData, -1, null, null, null);
+                processRow(localCache, currentMonth, trElements, obj, candidateList, startYear, generalPollData, -1, null, null, null, databaseUtils);
                 Collections.reverse(generalPollData);
                 uploadData(key, generalPollData, databaseUtils);
                 uploadPollster(newPollster, databaseUtils);
@@ -102,29 +100,28 @@ public class DataProcess {
 
     /**
      * @param domain The domain address where the data comes from
-     * @param table The table where the data being uploaded to
      * @param localCache The localCache stores the pollster information, can be used to keep track of new pollsters and latest data (Needs further implementation)
      * @param databaseUtils Database operation functions
      */
-    public void processStateData(String domain, String table, Map<String, Integer> localCache, DatabaseUtils databaseUtils) {
+    public void processStateData(String domain, Map<String, Integer> localCache, DatabaseUtils databaseUtils) {
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH) + 1;
         statePollData = new ArrayList<>();
         for (String key: statePollLink.keySet()) {
             if (statePollLink.get(key).length() == 0) continue;
-            Elements trElements = getTableData(domain + generalPollLink.get(key));
+            Elements trElements = getTableData(domain + statePollLink.get(key));
             if (trElements != null) {
                 Elements columnName = trElements.get(0).select("th");
-                org.json.JSONObject obj = getLatestRecord(table, databaseUtils);
+                org.json.JSONObject obj = getLatestRecord("state_poll", databaseUtils, key);
                 List<String> candidateList = new ArrayList<>();
                 for (int i = 3; i < columnName.size() - 1; i ++) candidateList.add(columnName.get(i).text().trim());
-
                 int startYear = calendar.get(Calendar.YEAR);
-                processRow(localCache, currentMonth, trElements, obj, candidateList, startYear, statePollData, -1, null, null, key);
+                processRow(localCache, currentMonth, trElements, obj, candidateList, startYear, statePollData, -1, null, null, key, databaseUtils);
             }
         }
         Collections.reverse(statePollData);
-        uploadData("state_poll", generalPollData, databaseUtils);
+        uploadData("state_poll", statePollData, databaseUtils);
+        uploadPollster(newPollster, databaseUtils);
     }
 
     /**
@@ -140,11 +137,15 @@ public class DataProcess {
      * @param stand1 One of the values of binary or comparison data
      * @param state Indicate a state poll
      */
-    private void processRow(Map<String, Integer> localCache, int currentMonth, Elements trElements, org.json.JSONObject obj, List<String> candidateList, int startYear, List<Map<String, String>> pollData, int pollIndex, String stand0, String stand1, String state) {
+    private void processRow(Map<String, Integer> localCache, int currentMonth, Elements trElements, org.json.JSONObject obj, List<String> candidateList, int startYear, List<Map<String, String>> pollData, int pollIndex, String stand0, String stand1, String state, DatabaseUtils databaseUtils) {
         int previousMonth = 12, i = 2;
         boolean firstLine = true, end = false;
         newPollster = new ArrayList<>();
-        if (trElements.get(1).hasClass("final")) i = 3;
+        System.out.println(state + " " + state.length());
+        if (trElements.get(1).hasClass("final")) {
+            i = 3;
+            if (state != null) updateFinalStatus(state, databaseUtils);
+        }
         for (; i < trElements.size(); i ++) {
             if (end) break;
             HashMap<String, String> row;
@@ -168,13 +169,14 @@ public class DataProcess {
             }
             if (tdElements.size() <= 3) break;
             String pollsterId = String.valueOf(localCache.get(pollster));
+            String poll = tdElements.get(candidateIndex ++).text().trim();
             if (pollIndex == -1) {
                 for (String candidate : candidateList) {
                     row = new HashMap<>();
                     row.put("pollster_id", pollsterId);
                     row.put("poll_date", date);
                     row.put("poll_year", Integer.toString(startYear));
-                    row.put("poll", tdElements.get(candidateIndex ++).text().trim());
+                    if (!poll.equals("--")) row.put("poll", poll);
                     row.put("candidate", candidate);
                     if (state != null) row.put("state", state);
                     if (obj != null && checkDataExistence(obj, row, localCache, pollster)) {
@@ -189,7 +191,7 @@ public class DataProcess {
                     row.put("pollster_id", pollsterId);
                     row.put("poll_date", date);
                     row.put("poll_year", Integer.toString(startYear));
-                    row.put("poll", tdElements.get(pollIndex + j).text().trim());
+                    row.put("poll", poll);
                     row.put("stand", j == 0 ? stand0 : stand1);
                     if(obj != null && checkDataExistence(obj, row, localCache, pollster)) {
                         end = true;
@@ -304,12 +306,22 @@ public class DataProcess {
      * @param databaseUtils Database operation functions
      * @return JSON object that stores the latest record in the database
      */
-    public org.json.JSONObject getLatestRecord(String table, DatabaseUtils databaseUtils) {
-        String sql = "SELECT pollster_id, poll_date, poll_year FROM " + table + " WHERE pollster_id=(SELECT MAX(pollster_id) FROM " + table + ")";
+    public org.json.JSONObject getLatestRecord(String table, DatabaseUtils databaseUtils, String state) {
+        String sql;
+        if (state.length() > 0) {
+            sql = "SELECT pollster_id, poll_date, poll_year FROM (SELECT * FROM " + table + " WHERE state='" + state + "') t";
+        } else {
+            sql = "SELECT pollster_id, poll_date, poll_year FROM " + table + " WHERE pollster_id=(SELECT MAX(pollster_id) FROM " + table + ")";
+        }
         JSONArray jsonArray = databaseUtils.executeSql(sql);
         JSONArray resultSet = jsonArray.getJSONObject(0).getJSONArray("resultSet");
         if (resultSet.length() == 0) return null;
         return resultSet.getJSONObject(0);
+    }
+
+    public void updateFinalStatus(String state, DatabaseUtils databaseUtils) {
+        String sql = "UPDATE states SET final=1 WHERE state_po='" + state + "'";
+        databaseUtils.executeUpdate(sql);
     }
 
     /**
@@ -348,16 +360,17 @@ public class DataProcess {
         }
     }
 
-//    public static void main(String[] args) throws IOException {
-//        DataProcess dp = new DataProcess();
-//        DatabaseUtils du = new DatabaseUtils();
-//        dp.getMap();
-//        Map<String, Integer> map = new HashMap<>();
-//        du.connect();
-//        dp.getPollster(map, du);
-////        dp.processBinaryData("https://www.realclearpolitics.com/epolls/", map, du);
+    public static void main(String[] args) throws IOException {
+        DataProcess dp = new DataProcess();
+        DatabaseUtils du = new DatabaseUtils();
+        dp.getMap();
+        Map<String, Integer> map = new HashMap<>();
+        du.connect();
+        dp.getPollster(map, du);
+//        dp.processBinaryData("https://www.realclearpolitics.com/epolls/", map, du);
 //        dp.processNominationCSV("./resource/democratic_presidential_nomination.csv", "democratic_nomination", map, dp.generalPollData, du);
 //        dp.processGeneralData("https://www.realclearpolitics.com/epolls/", map, du);
-//        du.close();
-//    }
+        dp.processStateData("https://www.realclearpolitics.com/epolls/", map, du);
+        du.close();
+    }
 }

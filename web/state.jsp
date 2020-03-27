@@ -25,14 +25,9 @@
 <div class="container">
     <jsp:include page="header.jsp" />
     <div class="main">
-        <div class="selection clearfix">
-            <div class="selection-button active">Democratic</div>
-            <div class="selection-button">Publican</div>
-        </div>
         <!-- Shows when the final result comes out -->
         <div class="final-container">
             <div class="final-result-container clearfix">
-                <h2>Final Result</h2>
                 <div class="left-container">
                     There should be a map showing the winner's image
                 </div>
@@ -43,41 +38,6 @@
                 <div class="right-container">
                     There should a pie chart showing the final proportion
                 </div>
-            </div>
-        </div>
-        <!-- Shows when the final result doesn't come out -->
-        <div class="streaming-container">
-            <div class="filter-container">
-                <h2>Filter</h2>
-                <div class="filters">
-                    <h3>Time</h3>
-                    <ul class="slots clearfix">
-                        <li>7D</li>
-                        <li>14D</li>
-                        <li>30D</li>
-                        <li>3M</li>
-                        <li>6M</li>
-                        <li>1Y</li>
-                        <li class="active">MAX</li>
-                    </ul>
-                </div>
-                <div class="filters">
-                    <h3>Line</h3>
-                    <ul class="slots clearfix">
-                        <li>Biden</li>
-                        <li>Sanders</li>
-                        <li>Buttiguieg</li>
-                        <li>Warren</li>
-                        <li class="active">ALL</li>
-                    </ul>
-                </div>
-                <div class="filters">
-                    <button class="reset-button">RESET</button>
-                </div>
-            </div>
-            <div class="plot-container">
-                <div>There should be a plot look like this.</div>
-                <img src="/img/plot-example1.png" style="width: 80%;" alt="">
             </div>
         </div>
     </div>

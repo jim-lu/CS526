@@ -1,12 +1,10 @@
 $(function () {
-    const maxId = $("#max");
-    const plotContainer = $(".plot-container");
-    const lineFilterSlots = $(".line-slot");
     const dataPickerFromDate = $("#from-date");
     const dataPickerToDate = $("#to-date");
-    let stand1, stand2;
-    let maxDomain;
+    const maxId = $("#max");
+    const plotContainer = $(".plot-container");
     let timeActive = maxId;
+    let maxDomain;
 
     let margin = {top: 10, right: 10, bottom: 100, left: 40};
     let contextMargin = {top: 510, right: 10, bottom: 30, left: 40};
@@ -35,43 +33,71 @@ $(function () {
     });
     let focus, context;
 
-    const poll_data = (function() {
-        let dataObj = [];
-        $.ajax({
-            dataType: "json",
-            contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-            type: "get",
-            url: "PollServlet?method=" + getParams("poll"),
-            success: function (data) {
-                if (data[0].msg === 'Query completed!') {
-                    let resultSet = data[0].resultSet;
-                    let dateMap1 = new Map(), countMap1 = new Map(), dateMap2 = new Map(), countMap2 = new Map();
-                    stand1 = resultSet[0].stand;
-                    stand2 = resultSet[1].stand;
-                    lineFilterSlots.eq(0).text(stand1);
-                    lineFilterSlots.eq(1).text(stand2);
-                    for (let i = 0; i < resultSet.length; i += 2) {
-                        formalizeDate(resultSet, i, dateMap1, countMap1);
+    $.ajax({
+        dataType: "json",
+        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+        type: "get",
+        url: "PollServlet?method=" + getParams("poll"),
+        success: function (data) {
+            if (data[0].msg === 'Query completed!') {
+                let resultSet = data[0].resultSet, pollsterId = resultSet[0].pollster_id, pollDate = resultSet[0].poll_date;
+                let unprocessedData = [], tmpObj = {}, dateArr = pollDate.split("-");
+                let candidateSet = new Set(), countMap = new Map();
+                let parseDate = d3.time.format("%Y-%m-%d").parse;
+                for (let i = 0; i < resultSet.length; i ++) {
+                    let candidate = resultSet[i].candidate.trim();
+                    if (resultSet[i].pollster_id !== pollsterId || resultSet[i].poll_date !== pollDate || candidate in tmpObj) {
+                        setupCountMap(countMap, tmpObj.date.getTime());
+                        unprocessedData.push(tmpObj);
+                        tmpObj = {};
+                        pollsterId = resultSet[i].pollster_id;
+                        pollDate = resultSet[i].poll_date;
+                        dateArr = pollDate.split("-");
                     }
-                    for (let i = 1; i < resultSet.length; i += 2) {
-                        formalizeDate(resultSet, i, dateMap2, countMap2);
-                    }
-                    let parseDate = d3.time.format("%Y-%m-%d").parse;
-                    pushData(dateMap1, dateMap2, countMap1, countMap2, dataObj, parseDate, stand1, stand2);
-                    dataObj.sort(compareDate);
-                    drawGraph(dataObj);
+                    if(!("date" in tmpObj)) tmpObj["date"] = parseDate(resultSet[i].poll_year + "-" + dateArr[1].trim().replace("/", "-"));
+                    if (resultSet[i].poll !== "--") tmpObj[candidate] = parseFloat(resultSet[i].poll);
+                    candidateSet.add(candidate);
                 }
+                setupCountMap(countMap, tmpObj.date.getTime());
+                unprocessedData.push(tmpObj);
+                unprocessedData.sort(compareDate);
+                for (let i = 0; i < unprocessedData.length; ) {
+                    let date = unprocessedData[i].date.getTime();
+                    let lastIndex = i + countMap.get(date) - 1;
+                    for (let j = countMap.get(date) - 2; j >= 0; j --) {
+                        for (let key in unprocessedData[i]) {
+                            if (key === "date") continue;
+                            if (!(key in unprocessedData[i + j])) unprocessedData[i + j][key] = 0;
+                            unprocessedData[lastIndex][key] += unprocessedData[i + j][key];
+                        }
+                    }
+                    for (let key in unprocessedData[i]) {
+                        if (key === "date") continue;
+                        unprocessedData[lastIndex][key] /= countMap.get(date);
+                    }
+                    i += countMap.get(date);
+                    dataObj.push(unprocessedData[lastIndex]);
+                }
+                dataObj.forEach(function (obj) {
+                    candidateSet.forEach(function (candidate) {
+                        if (!(candidate in obj)) obj[candidate] = null;
+                    })
+                });
+                let html = "";
+                candidateSet.forEach(function(candidate) {
+                    html += "<li id='" + candidate + "-line' name='" + candidate + "' class='filter-slot line-slot active'>" + candidate + "</li>"
+                });
+                $("#line-filters").prepend(html);
+                drawGraph(dataObj);
             }
-        });
-        return dataObj;
-    })();
+        }
+    });
 
     $(".date-picker").datepicker();
     $(".apply-button").on("click", function () {
         let parseDate = d3.time.format("%m/%d/%Y").parse;
         let fromDate = parseDate(dataPickerFromDate.datepicker().val()), toDate = parseDate(dataPickerToDate.datepicker().val());
-        let timeSlot0 = fromDate.getTime(), timeSlot1 = toDate.getTime();
-        if (timeSlot0 >= timeSlot1) {
+        if (fromDate.getTime() > toDate.getTime()) {
             $(".time-selection span").css("display", "block");
             return;
         }
@@ -82,7 +108,7 @@ $(function () {
         drawBrush([fromDate, toDate], brush);
     });
 
-    $(".filter-slot").on("click", function () {
+    $(document).on("click", ".filter-slot", function () {
         let currObj = $(this);
         if (currObj.hasClass("time-slot")) {
             changeTimeActive(currObj);
@@ -95,25 +121,32 @@ $(function () {
             }
         } else {
             changeLineActive(currObj);
-            let labelStr = labelToClass(currObj.text());
             if (currObj.hasClass("active")) {
-                $("." + labelStr).fadeIn();
+                $("." + currObj.attr("id")).fadeIn();
             } else {
-                $("." + labelStr).fadeOut();
+                $("." + currObj.attr("id")).fadeOut();
             }
+        }
+        if (currObj.attr("id") === "reset-button") {
+            changeTimeActive(maxId);
+            const lineSlot = $(".line-slot");
+            for (let i = 0; i < lineSlot.length; i ++) {
+                if (!lineSlot.eq(i).hasClass("active")) {
+                    lineSlot.eq(i).addClass("active");
+                    $("." + lineSlot.eq(i).attr("id")).fadeIn();
+                }
+            }
+            drawBrush(maxDomain, brush);
         }
     });
 
-    $("#reset-button").on("click", function () {
-        changeTimeActive(maxId);
-        for (let i = 0; i < lineFilterSlots.length; i ++) {
-            if (!lineFilterSlots.eq(i).hasClass("active")) {
-                lineFilterSlots.eq(i).addClass("active");
-                $("." + labelToClass(lineFilterSlots.eq(i).text()) + "line").fadeIn();
-            }
+    function setupCountMap(countMap, key) {
+        if (countMap.has(key)) {
+            countMap.set(key, countMap.get(key) + 1);
+        } else {
+            countMap.set(key, 1);
         }
-        drawBrush(maxDomain, brush);
-    });
+    }
 
     function drawGraph(dataObj) {
         svg.append("defs").append("clipPath").attr("id", "clip").append("rect").attr("width", width).attr("height", height);
@@ -138,14 +171,14 @@ $(function () {
 
         let legend = svg.selectAll("g").data(polls).enter().append("g").attr("class", "legend");
         legend.append("rect").attr("x", function (d, i) {
-            if (i > 0) return polls[i - 1].name.length * 2 + (i + 1) * 100;
-            return (i + 1) * 100;
+            if (i > 0) return polls[i - 1].name.length * 2 + i * 85 + 70;
+            return i * 85 + 70;
         }).attr("y", 10).attr("width", 10).attr("height", 10).style("fill", function (d) {
             return color(d.name);
         });
         legend.append("text").attr("x", function (d, i) {
-            if (i > 0) return polls[i - 1].name.length * 2 + (i + 1) * 100 + 13;
-            return (i + 1) * 100 + 13;
+            if (i > 0) return polls[i - 1].name.length * 2 + i * 85 + 83;
+            return i * 85 + 83;
         }).attr("y", 20).text(function (d) {
             return d.name;
         });
@@ -154,7 +187,7 @@ $(function () {
         context = svg.append("g").attr("transform", "translate(" + contextMargin.left + "," + contextMargin.top + ")");
         let focusLineGroups = focus.selectAll("g").data(polls).enter().append("g");
         focusLineGroups.append("path").attr("class", function (d) {
-            return "line " + labelToClass(d.name);
+            return "line " + d.name + "-line";
         }).attr("d", function (d) {
             return line(d.values);
         }).attr("fill", "none").attr("stroke-width", 1).style("stroke", function (d) {
@@ -165,7 +198,7 @@ $(function () {
 
         let contextLineGroups = context.selectAll("g").data(polls).enter().append('g');
         contextLineGroups.append("path").attr("class", function (d) {
-            return "line " + labelToClass(d.name);
+            return "line " + d.name + "-line";
         }).attr("d", function (d) {
             return line2(d.values);
         }).attr("fill", "none").attr("stroke-width", 1).style("stroke", function (d) {
@@ -178,7 +211,7 @@ $(function () {
         mouseG.append("path").attr("class", "mouse-line").style("stroke", "black").style("stroke-width", 1);
         const lines = $(".line");
         let mousePerLine = mouseG.selectAll(".mouse-per-line").data(polls).enter().append("g").attr("class", function (d) {
-            return "mouse-per-line " + labelToClass(d.name);
+            return "mouse-per-line " + d.name + "-line";
         });
         mousePerLine.append("circle").attr("r", 5).style("stroke", function (d) {
             return color(d.name);
@@ -186,8 +219,14 @@ $(function () {
         mousePerLine.append("text").attr("transform", "translate(10, 3)");
         mouseG.append("svg:rect").attr("width", width).attr("height", height).attr("fill", "none").attr("pointer-events", "all").on("mouseover", function () {
             d3.select(".mouse-line").style("opacity", "1");
-            d3.selectAll(".mouse-per-line circle").style("opacity", "1");
-            d3.selectAll(".mouse-per-line text").style("opacity", "1");
+            d3.selectAll(".mouse-per-line circle").style("opacity", function (d) {
+                let mouse = d3.mouse(this);
+                return checkNullValue(mouse, d, x);
+            });
+            d3.selectAll(".mouse-per-line text").style("opacity", function (d) {
+                let mouse = d3.mouse(this);
+                return checkNullValue(mouse, d, x);
+            });
         }).on("mouseout", function () {
             d3.select(".mouse-line").style("opacity", "0");
             d3.selectAll(".mouse-per-line circle").style("opacity", "0");
@@ -199,6 +238,8 @@ $(function () {
                 d += " " + mouse[0] + "," + 0;
                 return d;
             });
+            d3.selectAll(".mouse-per-line circle").style("opacity", function (d) {return checkNullValue(mouse, d, x)});
+            d3.selectAll(".mouse-per-line text").style("opacity", function (d) {return checkNullValue(mouse, d, x)});
             d3.selectAll(".mouse-per-line").attr("transform", function(d, i) {
                 let xDate = x.invert(mouse[0]), bisect = d3.bisector(function(d) { return d.date; }).right;
                 bisect(d.values, xDate);
@@ -226,36 +267,14 @@ $(function () {
         focus.select(".y.axis").call(yAxis);
     }
 
-    function formalizeDate(resultSet, i, dateMap, countMap) {
-        let dateArr = resultSet[i].poll_date.split("-");
-        let date = resultSet[i].poll_year + "-" + dateArr[1].trim().replace("/", "-");
-        if (dateMap.has(date)) {
-            dateMap.set(date, dateMap.get(date) + parseFloat(resultSet[i].poll));
-            countMap.set(date, countMap.get(date) + 1);
-            return;
-        }
-        dateMap.set(date, parseFloat(resultSet[i].poll));
-        countMap.set(date, 1);
-    }
-
-    function pushData(dateMap1, dateMap2, countMap1, countMap2, data, parseDate) {
-        for (let key of dateMap1.keys()) {
-            let poll1 = dateMap1.get(key) / countMap1.get(key), poll2 = dateMap2.get(key) / countMap2.get(key);
-            data.push({
-                "date": parseDate(key),
-                [stand1]: poll1,
-                [stand2]: poll2,
-                "Bias": poll1 - poll2
-            });
-        }
-    }
-
-    function changeLineActive(currObj) {
-        if (currObj.hasClass("active")) {
-            currObj.removeClass("active");
-        } else {
-            currObj.addClass("active");
-        }
+    function checkNullValue(mouse, d, x) {
+        let dateTimeStamp = x.invert(mouse[0]).getTime();
+        let index = 0;
+        while (index < d.values.length && d.values[index].date.getTime() < dateTimeStamp) index ++;
+        let prev = d.values[index - 1], next = d.values[index];
+        if (prev === undefined) return next.poll === null ? "0" : "1";
+        if (prev.poll === null || next.poll === null) return "0";
+        return "1";
     }
 
     function changeTimeActive(addObj) {
@@ -264,12 +283,11 @@ $(function () {
         timeActive = addObj;
     }
 
-    function labelToClass(label) {
-        let labelArr = label.split(/\s|\//);
-        let labelStr = "";
-        labelArr.forEach(function (s) {
-            labelStr += s + "-";
-        });
-        return labelStr + "line";
+    function changeLineActive(currObj) {
+        if (currObj.hasClass("active")) {
+            currObj.removeClass("active");
+        } else {
+            currObj.addClass("active");
+        }
     }
 });

@@ -87,6 +87,16 @@ public class DatabaseUtils {
         return json;
     }
 
+    public void executeUpdate(String sql) {
+        try {
+            Statement setupStatement = connection.createStatement();
+            setupStatement.executeUpdate(sql);
+            setupStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public JSONArray resultSetConvert(ResultSet rs) throws SQLException {
         JSONArray json = new JSONArray();
         ResultSetMetaData metaData = rs.getMetaData();
