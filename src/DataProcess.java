@@ -107,6 +107,7 @@ public class DataProcess {
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH) + 1;
         statePollData = new ArrayList<>();
+        newPollster = new ArrayList<>();
         for (String key: statePollLink.keySet()) {
             if (statePollLink.get(key).length() == 0) continue;
             Elements trElements = getTableData(domain + statePollLink.get(key));
@@ -117,11 +118,38 @@ public class DataProcess {
                 for (int i = 3; i < columnName.size() - 1; i ++) candidateList.add(columnName.get(i).text().trim());
                 int startYear = calendar.get(Calendar.YEAR);
                 processRow(localCache, currentMonth, trElements, obj, candidateList, startYear, statePollData, -1, null, null, key, databaseUtils);
+                if (statePollData.size() > 0) System.out.println(statePollData.get(0).size());
             }
         }
         Collections.reverse(statePollData);
         uploadData("state_poll", statePollData, databaseUtils);
         uploadPollster(newPollster, databaseUtils);
+    }
+
+    public void processFinalData(String domain, Set<String> localCache, DatabaseUtils databaseUtils) {
+        statePollData = new ArrayList<>();
+        for (String key: statePollLink.keySet()) {
+            if (statePollLink.get(key).length() == 0 || localCache.contains(key)) continue;
+            Elements trElements = getTableData(domain + statePollLink.get(key));
+            if (trElements != null) {
+                Elements columnName = trElements.get(0).select("th");
+                List<String> candidateList = new ArrayList<>();
+                for (int i = 3; i < columnName.size() - 1; i ++) candidateList.add(columnName.get(i).text().trim());
+                if (!trElements.get(1).hasClass("final")) continue;
+                Elements tdElements = trElements.get(1).select("td");
+                HashMap<String, String> row;
+                int candidateIndex = 3;
+                for (String candidate: candidateList) {
+                    String poll = tdElements.get(candidateIndex ++).text().trim();
+                    row = new HashMap<>();
+                    row.put("state", key);
+                    row.put("poll", poll);
+                    row.put("candidate", candidate);
+                    statePollData.add(row);
+                }
+            }
+        }
+        uploadData("state_poll_final", statePollData, databaseUtils);
     }
 
     /**
@@ -140,14 +168,11 @@ public class DataProcess {
     private void processRow(Map<String, Integer> localCache, int currentMonth, Elements trElements, org.json.JSONObject obj, List<String> candidateList, int startYear, List<Map<String, String>> pollData, int pollIndex, String stand0, String stand1, String state, DatabaseUtils databaseUtils) {
         int previousMonth = 12, i = 2;
         boolean firstLine = true, end = false;
-        newPollster = new ArrayList<>();
         System.out.println(state + " " + state.length());
-        if (trElements.get(1).hasClass("final")) {
-            i = 3;
-            if (state != null) updateFinalStatus(state, databaseUtils);
-        }
+        if (trElements.get(1).hasClass("final") && state != null) updateFinalStatus(state, databaseUtils);
         for (; i < trElements.size(); i ++) {
             if (end) break;
+            if (trElements.get(i).hasClass("rcpAvg") || trElements.get(i).hasClass("rcpAvg2")) continue;
             HashMap<String, String> row;
             int candidateIndex = 3;
             Elements tdElements = trElements.get(i).select("td");
@@ -169,14 +194,14 @@ public class DataProcess {
             }
             if (tdElements.size() <= 3) break;
             String pollsterId = String.valueOf(localCache.get(pollster));
-            String poll = tdElements.get(candidateIndex ++).text().trim();
             if (pollIndex == -1) {
                 for (String candidate : candidateList) {
+                    String poll = tdElements.get(candidateIndex ++).text().trim();
                     row = new HashMap<>();
                     row.put("pollster_id", pollsterId);
                     row.put("poll_date", date);
                     row.put("poll_year", Integer.toString(startYear));
-                    if (!poll.equals("--")) row.put("poll", poll);
+                    row.put("poll", poll);
                     row.put("candidate", candidate);
                     if (state != null) row.put("state", state);
                     if (obj != null && checkDataExistence(obj, row, localCache, pollster)) {
@@ -187,6 +212,7 @@ public class DataProcess {
                 }
             } else {
                 for (int j = 0; j < 2; j ++) {
+                    String poll = tdElements.get(candidateIndex + i).text().trim();
                     row = new HashMap<>();
                     row.put("pollster_id", pollsterId);
                     row.put("poll_date", date);
@@ -280,6 +306,27 @@ public class DataProcess {
         uploadPollster(newPollster, databaseUtils);
     }
 
+    public void processPresident2016CSV(DatabaseUtils databaseUtils) throws IOException {
+        String fileName = "./resource/20161108__us__general__president__county.csv";
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = br.readLine();
+        String[] lineArr;
+        List<Map<String, String>> pollData = new ArrayList<>();
+        int i = 0;
+        while ((line = br.readLine()) != null) {
+            lineArr = line.split(",");
+            Map<String, String> row = new HashMap<>();
+            System.out.println(lineArr.length + " " + (i ++));
+            row.put("state", lineArr[0]);
+            row.put("county", lineArr[1]);
+            row.put("party", lineArr[2]);
+            row.put("candidate", lineArr[3]);
+            row.put("votes", lineArr[4]);
+            pollData.add(row);
+        }
+        uploadData("general_president_2016", pollData, databaseUtils);
+    }
+
     /**
      * @param object JSON object that stores the newest data in the database
      * @param row Current row of data that needs to be checked
@@ -360,6 +407,16 @@ public class DataProcess {
         }
     }
 
+    public void getExistingFinalState(Set<String> localCache, DatabaseUtils databaseUtils) {
+        String sql = "SELECT state FROM state_poll_final";
+        JSONArray json = databaseUtils.executeSql(sql);
+        JSONArray resultSet = json.getJSONObject(0).getJSONArray("resultSet");
+        for (int i = 0; i < resultSet.length(); i ++) {
+            System.out.println(resultSet.getJSONObject(i).getString("state"));
+            localCache.add(resultSet.getJSONObject(i).getString("state"));
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         DataProcess dp = new DataProcess();
         DatabaseUtils du = new DatabaseUtils();
@@ -370,7 +427,14 @@ public class DataProcess {
 //        dp.processBinaryData("https://www.realclearpolitics.com/epolls/", map, du);
 //        dp.processNominationCSV("./resource/democratic_presidential_nomination.csv", "democratic_nomination", map, dp.generalPollData, du);
 //        dp.processGeneralData("https://www.realclearpolitics.com/epolls/", map, du);
-        dp.processStateData("https://www.realclearpolitics.com/epolls/", map, du);
+//        dp.processStateData("https://www.realclearpolitics.com/epolls/", map, du);
+//        dp.processPresident2016CSV(du);
+
+
+//        Set<String> set = new HashSet<>();
+//        dp.getExistingFinalState(set, du);
+//        dp.processFinalData("https://www.realclearpolitics.com/epolls/", set, du);
+
         du.close();
     }
 }

@@ -9,7 +9,7 @@
 <div class="header">
     <div class="header-top clearfix">
         <div class="logo">
-            <img src=""  alt=""/>
+            <a href="index.jsp"><img src="/img/logo.png"  alt=""/></a>
         </div>
         <div class="search-box">
             <form class="clearfix">

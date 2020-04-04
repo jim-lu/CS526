@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Candidate</title>
+    <title>State</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,15 +28,21 @@
         <!-- Shows when the final result comes out -->
         <div class="final-container">
             <div class="final-result-container clearfix">
-                <div class="left-container">
-                    There should be a map showing the winner's image
-                </div>
                 <div class="middle-container">
-                    There should a bar chart showing the final proportion. Something that look like this.
-                    <img src="/img/plot-example2.png" style="width: 80%" alt="">
+                    <h2></h2>
+                    <h4></h4>
+                    <div class="map-container"></div>
+                </div>
+                <div class="left-container">
+                    <h3>Who's Winning</h3>
+                    <div class="title clearfix">
+                        <div class="candidate">CANDIDATE</div>
+                        <div class="proportion">PROPORTION(%)</div>
+                    </div>
+                    <div class="bar-container"></div>
                 </div>
                 <div class="right-container">
-                    There should a pie chart showing the final proportion
+                    <div class="pie-container"></div>
                 </div>
             </div>
         </div>
@@ -45,9 +51,10 @@
 
     <!-- JS -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script><%@include file="WEB-INF/static/js/jquery.usmap.js"%></script>
-    <script><%@include file="WEB-INF/static/js/index.js"%></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript"src="https://d3js.org/topojson.v1.min.js"></script>
+    <script><%@include file="WEB-INF/static/js/common.js" %></script>
+    <script><%@include file="WEB-INF/static/js/state.js"%></script>
 </div>
 
 </body>

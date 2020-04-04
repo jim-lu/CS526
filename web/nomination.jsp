@@ -51,6 +51,7 @@
             </div>
         </div>
         <div class="plot-container">
+            <h2 class="plot-name"></h2>
         </div>
     </div>
     <div class="footer"></div>

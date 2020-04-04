@@ -17,93 +17,75 @@
     color: #ff9933;
     background-color: #003366;
 }
-/* Shows when the final result comes out */
 .final-result-container {
     width: 100%;
 }
 .final-result-container h2 {
     height: 40px;
     line-height: 40px;
-    font-size: 28px;
+    font-size: 40px;
     text-align: center;
     font-weight: bold;
-    margin-bottom: 20px;
+    padding: 10px 0;
+    color: #003366;
 }
-.left-container, .middle-container, .right-container {
-    width: 33%;
-    float: left;
+.final-result-container h4 {
+    height: 20px;
+    line-height: 20px;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    color: #003366;
 }
-.middle-container{
-    background-color: #003366;
-    color: #fff;
-}
-
-/* Shows when the final result doesn't come out */
-.streaming-container {
-    width: 100%;
-    display: none;
-}
-.filter-container {
-    width: 20%;
+.left-container, .right-container {
+    width: 50%;
     height: 600px;
     padding: 20px 0;
     float: left;
-    background-color: #eee;
+    background-color: #003366;
 }
-.filter-container h2 {
-    margin-top: 20px;
-    font-size: 18px;
+.middle-container {
+    width: 100%;
+    padding: 20px 0;
+    background-color: #ff9933;
+}
+.map-container {
+    width: 960px;
+    height: 500px;
+    padding: 10px 0;
+    margin: 0 auto;
+}
+.bar-container {
+    width: 500px;
+    margin: 0 auto;
+}
+.pie-container {
+    padding: 10px 0;
+}
+h3 {
+    font-size: 24px;
+    color: #ff9933;
     font-weight: bold;
+    height: 40px;
+    line-height: 40px;
     text-indent: 20px;
 }
-.filters {
-    width: 80%;
+.title {
+    width: 500px;
     margin: 0 auto;
-    margin-top: 20px;
+    border-bottom: 1px solid #ff9933;
+    color: #ff9933;
 }
-.slots {
-    width: 100%;
-}
-.slots li {
-    min-width: 20%;
-    height: 30px;
-    padding: 0 3%;
-    margin-top: 10px;
-    margin-right: 5%;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 5px;
-    background-color: #fff;
+.candidate, .proportion {
     float: left;
-    cursor: pointer;
-}
-.slots li:hover {
-    color: #ff9933;
-    background-color: #003366;
-}
-.slots li.active {
-    color: #ff9933;
-    background-color: #003366;
-}
-.reset-button {
     height: 30px;
-    padding: 0 3%;
-    margin-top: 10px;
-    text-align: center;
     line-height: 30px;
-    border-radius: 5px;
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
-    outline: none;
+    text-indent: 10px;
 }
-.reset-button:hover {
-    color: #ff9933;
-    background-color: #003366;
+.candidate {
+    width: 115px;
 }
-.plot-container {
-    width: 80%;
-    height: 600px;
-    padding: 20px 0;
-    float: left;
+.proportion {
+    width: 385px;
 }

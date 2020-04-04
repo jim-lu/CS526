@@ -100,6 +100,13 @@
     padding: 20px 0;
     float: left;
 }
+.plot-name {
+    text-indent: 20px;
+    font-size: 30px;
+    color: #003366;
+    height: 50px;
+    line-height: 50px;
+}
 .axis path, .axis line, .y.axis path {
     stroke: #000;
     fill: none;

@@ -37,22 +37,23 @@
       </div>
       <div class="democratic-container">
         <h3>Democratic Candidate</h3>
-        <ul class="candidate-list clearfix">
-
-        </ul>
+        <ul class="candidate-list clearfix"></ul>
       </div>
     </div>
     <div class="map-container">
-      <h2>Contests</h2>
-      <div id="map" style="width: 800px; height: 500px; margin: 0 auto;"></div>
+      <h2>Who's Winning in Democratic</h2>
+      <div class="map"></div>
+      <div class="label-container clearfix"></div>
     </div>
   </div>
-  <div class="footer"></div>
+  <div class="footer">
+    <p style="text-align: center; padding: 20px 0;">Data Source: <a href="https://www.realclearpolitics.com/">RealClear Politics</a></p>
+  </div>
 
   <!-- JS -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-  <script><%@include file="WEB-INF/static/js/jquery.usmap.js"%></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript"src="https://d3js.org/topojson.v1.min.js"></script>
   <script><%@include file="WEB-INF/static/js/common.js"%></script>
   <script><%@include file="WEB-INF/static/js/index.js"%></script>
 </div>

@@ -5,6 +5,7 @@ $(function () {
     const plotContainer = $(".plot-container");
     let timeActive = maxId;
     let maxDomain;
+    let dataObj = [];
 
     let margin = {top: 10, right: 10, bottom: 100, left: 40};
     let contextMargin = {top: 510, right: 10, bottom: 30, left: 40};
@@ -40,6 +41,13 @@ $(function () {
         url: "PollServlet?method=" + getParams("poll"),
         success: function (data) {
             if (data[0].msg === 'Query completed!') {
+                let titleArr = getParams("poll").split(/(?=[A-Z])/);
+                let title = "";
+                titleArr.forEach(function (s) {
+                    title += s.toUpperCase() + " ";
+                });
+                $(".plot-name").text(title);
+
                 let resultSet = data[0].resultSet, pollsterId = resultSet[0].pollster_id, pollDate = resultSet[0].poll_date;
                 let unprocessedData = [], tmpObj = {}, dateArr = pollDate.split("-");
                 let candidateSet = new Set(), countMap = new Map();

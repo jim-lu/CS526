@@ -15,7 +15,7 @@ $(function () {
         contextHeight = plotContainer.innerHeight() * 0.9 - contextMargin.top - contextMargin.bottom;
     let x = d3.time.scale().range([0, width]), y = d3.scale.linear().range([height, 0]);
     let x2 = d3.time.scale().range([0, width]), y2 = d3.scale.linear().range([contextHeight, 0]);
-    let color = d3.scale.category20();
+    let color = d3.scale.category10();
     let xAxis = d3.svg.axis().scale(x).orient("bottom"), yAxis = d3.svg.axis().scale(y).orient("left"), xAxis2 = d3.svg.axis().scale(x2).orient("bottom");
     let brush = d3.svg.brush().x(x2).on("brush", brushed);
     let svg = d3.select(".plot-container").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom);
@@ -44,6 +44,13 @@ $(function () {
             url: "PollServlet?method=" + getParams("poll"),
             success: function (data) {
                 if (data[0].msg === 'Query completed!') {
+                    let titleArr = getParams("poll").split(/(?=[A-Z])/);
+                    let title = "";
+                    titleArr.forEach(function (s) {
+                        title += s.toUpperCase() + " ";
+                    });
+                    $(".plot-name").text(title);
+
                     let resultSet = data[0].resultSet;
                     let dateMap1 = new Map(), countMap1 = new Map(), dateMap2 = new Map(), countMap2 = new Map();
                     stand1 = resultSet[0].stand;

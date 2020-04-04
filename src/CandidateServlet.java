@@ -9,8 +9,8 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@WebServlet("/IndexServlet")
-public class IndexServlet extends HttpServlet {
+@WebServlet("/CandidateServlet")
+public class CandidateServlet extends HttpServlet {
     private DatabaseUtils databaseUtils = new DatabaseUtils();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -24,29 +24,20 @@ public class IndexServlet extends HttpServlet {
         }
     }
 
-    public void getCandidates(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getCandidateInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getParameter("id");
+        String[] name = request.getParameter("name").split(" ");
+        String party = request.getParameter("party");
+        String lastName = name[name.length - 1];
+        JSONArray pollArray;
         databaseUtils.connect();
-        JSONArray jsonArray = databaseUtils.executeSql("SELECT candidate_id, candidate_name, candidate_img, candidate_party, candidate_status FROM candidates");
+        JSONArray infoArray = databaseUtils.executeSql("SELECT * FROM candidates WHERE candidate_id=" + id);
+        if (party.equals("1")) pollArray = databaseUtils.executeSql("SELECT * FROM democratic_nomination WHERE candidate='" + lastName + "'");
+        else pollArray = databaseUtils.executeSql("SELECT * FROM publican_nomination WHERE candidate='" + lastName + "'");
         databaseUtils.close();
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter();
-        out.println(jsonArray);
-        out.flush();
-        out.close();
-    }
-
-    public void getAllStatePoll(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        databaseUtils.connect();
-        JSONArray resultArray = databaseUtils.executeSql("SELECT * FROM state_poll_final");
-        JSONArray status = databaseUtils.executeSql("SELECT * FROM states");
-        JSONArray candidates = databaseUtils.executeSql("SELECT * FROM candidates WHERE candidate_party=1");
         JSONArray jsonArray = new JSONArray();
-        jsonArray.put(resultArray);
-        jsonArray.put(status);
-        jsonArray.put(candidates);
-        databaseUtils.close();
+        jsonArray.put(infoArray);
+        jsonArray.put(pollArray);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

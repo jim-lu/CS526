@@ -101,4 +101,22 @@ public class PollServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
+    public void getStatePoll(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String statePO = request.getParameter("state");
+        databaseUtils.connect();
+        JSONArray resultArray = databaseUtils.executeSql("SELECT * FROM state_poll_final WHERE state='" + statePO + "'");
+        JSONArray status = databaseUtils.executeSql("SELECT * FROM states WHERE state_po='" + statePO + "'");
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(resultArray);
+        jsonArray.put(status);
+        databaseUtils.close();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter();
+        out.println(jsonArray);
+        out.flush();
+        out.close();
+    }
 }

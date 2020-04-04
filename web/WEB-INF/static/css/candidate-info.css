@@ -13,7 +13,6 @@
 	padding-top: 20px;
 	float: left;
 	color: #fff;
-	background-color: #003366;
 }
 .img {
 	width: 50%;
@@ -41,11 +40,23 @@
 }
 .plot-container {
 	width: 90%;
-	background-color: #003366;
+	height: 600px;
+	padding: 20px 0;
 }
-.plot-container h2 {
+.right-container h2, .right-container p {
 	font-size: 24px;
 	text-indent: 20px;
 	height: 30px;
 	line-height: 30px;
+	color: #000;
+}
+.axis path, .axis line, .y.axis path {
+	stroke: #000;
+	fill: none;
+	shape-rendering: crispEdges;
+}
+.brush .extent {
+	stroke: #fff;
+	fill-opacity: 0.2;
+	shape-rendering: crispEdges;
 }

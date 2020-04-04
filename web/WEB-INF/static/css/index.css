@@ -52,7 +52,7 @@
 }
 .map-container {
     margin-top: 30px;
-    padding-top: 20px;
+    padding: 20px 0;
     background-color: #003366;
 }
 .map-container h2 {
@@ -63,4 +63,77 @@
     font-weight: bold;
     margin-bottom: 20px;
     color: #ff9933;
+}
+.map {
+    width: 960px;
+    height: 500px;
+    margin: 0 auto;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+}
+.hidden {
+    display: none;
+}
+.tooltip {
+    color: #222;
+    background-color: #fff;
+    padding: .5em;
+    text-shadow: #f5f5f5 0 1px 0;
+    border-radius: 2px;
+    opacity: 0.9;
+    position: absolute;
+}
+.row {
+    width: 250px;
+    border-top: 1px solid #999999;
+}
+.name, .value {
+    width: 50%;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+}
+.value {
+    text-align: center;
+}
+.row img {
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.label-container {
+    width: 50%;
+    height: 50px;
+    margin: 40px auto 0;
+}
+.label-outside-box {
+    height: 50px;
+    float: left;
+}
+.label-inside-box {
+    float: left;
+    width: 110px;
+    height: 40px;
+    line-height: 50px;
+    text-align: center;
+    margin: 0 auto;
+    padding: 5px 10px;
+    background-color: #ccc;
+}
+.label-inside-box img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+.label-inside-box .label-color {
+    width: 60px;
+    height: 20px;
+    float: left;
+    margin-top: 10px;
 }
