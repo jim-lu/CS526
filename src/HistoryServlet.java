@@ -9,8 +9,8 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@WebServlet("/IndexServlet")
-public class IndexServlet extends HttpServlet {
+@WebServlet("/HistoryServlet")
+public class HistoryServlet extends HttpServlet {
     private DatabaseUtils databaseUtils = new DatabaseUtils();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -24,28 +24,13 @@ public class IndexServlet extends HttpServlet {
         }
     }
 
-    public void getCandidates(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getLastElectionPoll(HttpServletRequest request, HttpServletResponse response) throws IOException {
         databaseUtils.connect();
-        JSONArray jsonArray = databaseUtils.executeSql("SELECT candidate_id, candidate_name, candidate_img, candidate_party, candidate_status FROM candidates");
-//        databaseUtils.close();
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter();
-        out.println(jsonArray);
-        out.flush();
-        out.close();
-    }
-
-    public void getAllStatePoll(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        databaseUtils.connect();
-        JSONArray resultArray = databaseUtils.executeSql("SELECT * FROM state_poll_final");
-        JSONArray status = databaseUtils.executeSql("SELECT * FROM states");
-        JSONArray candidates = databaseUtils.executeSql("SELECT * FROM candidates WHERE candidate_party=1");
+        JSONArray resultArray = databaseUtils.executeSql("SELECT * FROM past_election_by_county WHERE election_year='2016'");
+        JSONArray states = databaseUtils.executeSql("SELECT state_name, state_po, state_fips FROM states");
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(resultArray);
-        jsonArray.put(status);
-        jsonArray.put(candidates);
+        jsonArray.put(states);
         databaseUtils.close();
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");

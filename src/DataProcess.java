@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -309,14 +310,12 @@ public class DataProcess {
     public void processPresident2016CSV(DatabaseUtils databaseUtils) throws IOException {
         String fileName = "./resource/20161108__us__general__president__county.csv";
         BufferedReader br = new BufferedReader(new FileReader(fileName));
-        String line = br.readLine();
+        String line;
         String[] lineArr;
         List<Map<String, String>> pollData = new ArrayList<>();
-        int i = 0;
         while ((line = br.readLine()) != null) {
             lineArr = line.split(",");
             Map<String, String> row = new HashMap<>();
-            System.out.println(lineArr.length + " " + (i ++));
             row.put("state", lineArr[0]);
             row.put("county", lineArr[1]);
             row.put("party", lineArr[2]);
@@ -325,6 +324,28 @@ public class DataProcess {
             pollData.add(row);
         }
         uploadData("general_president_2016", pollData, databaseUtils);
+    }
+
+    public void processPastElectionByCountyCSV(DatabaseUtils databaseUtils) throws IOException {
+        String fileName = "./resource/countypres_2000-2016.csv";
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = br.readLine();
+        String[] lineArr;
+        List<Map<String, String>> counties = new ArrayList<>();
+        while ((line = br.readLine()) != null) {
+            lineArr = line.split(",");
+            Map<String, String> row = new HashMap<>();
+            row.put("election_year", lineArr[0]);
+            row.put("state_po", lineArr[2]);
+            row.put("county_name", lineArr[3]);
+            row.put("county_fips", lineArr[4]);
+            row.put("candidate", lineArr[6]);
+            row.put("party", lineArr[7]);
+            row.put("candidate_vote", lineArr[8]);
+            row.put("total_vote", lineArr[9]);
+            counties.add(row);
+        }
+        uploadData("past_election_by_county",counties, databaseUtils);
     }
 
     /**
@@ -423,7 +444,7 @@ public class DataProcess {
         dp.getMap();
         Map<String, Integer> map = new HashMap<>();
         du.connect();
-        dp.getPollster(map, du);
+//        dp.getPollster(map, du);
 //        dp.processBinaryData("https://www.realclearpolitics.com/epolls/", map, du);
 //        dp.processNominationCSV("./resource/democratic_presidential_nomination.csv", "democratic_nomination", map, dp.generalPollData, du);
 //        dp.processGeneralData("https://www.realclearpolitics.com/epolls/", map, du);
@@ -435,6 +456,7 @@ public class DataProcess {
 //        dp.getExistingFinalState(set, du);
 //        dp.processFinalData("https://www.realclearpolitics.com/epolls/", set, du);
 
+        dp.processPastElectionByCountyCSV(du);
         du.close();
     }
 }

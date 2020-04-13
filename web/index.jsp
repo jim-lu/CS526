@@ -31,9 +31,7 @@
       <h2>Who's Running</h2>
       <div class="republican-container">
         <h3>Republican Candidate</h3>
-        <ul class="candidate-list clearfix">
-
-        </ul>
+        <ul class="candidate-list clearfix"></ul>
       </div>
       <div class="democratic-container">
         <h3>Democratic Candidate</h3>
@@ -46,9 +44,7 @@
       <div class="label-container clearfix"></div>
     </div>
   </div>
-  <div class="footer">
-    <p style="text-align: center; padding: 20px 0;">Data Source: <a href="https://www.realclearpolitics.com/">RealClear Politics</a></p>
-  </div>
+  <jsp:include page="footer.jsp" />
 
   <!-- JS -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

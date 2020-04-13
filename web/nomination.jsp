@@ -54,7 +54,7 @@
             <h2 class="plot-name"></h2>
         </div>
     </div>
-    <div class="footer"></div>
+    <jsp:include page="footer.jsp" />
 
     <!-- JS -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
