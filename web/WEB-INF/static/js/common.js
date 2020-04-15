@@ -2,9 +2,11 @@ $(function() {
     const navigationPoll = $('.navigation-poll');
     const navigationNomination = $(".navigation-nomination");
     const navigationState = $('.navigation-state');
+    const navigationHistory = $('.navigation-history');
     const pollList = $('.poll-list');
     const nominationList = $(".nomination-list");
     const stateList = $('.state-list');
+    const historyList = $('.history-list');
 
     navigationPoll.hover(function() {
         pollList.fadeIn();
@@ -20,6 +22,11 @@ $(function() {
         stateList.fadeIn();
     }, function() {
         stateList.fadeOut();
+    });
+    navigationHistory.hover(function () {
+        historyList.fadeIn();
+    }, function () {
+        historyList.fadeOut();
     });
 
     $.ajax({
@@ -58,4 +65,10 @@ function drawBrush(dateRange, brush) {
     brush.extent(dateRange);
     brush(d3.select(".brush").transition());
     brush.event(d3.select(".brush").transition());
+}
+
+function comparePoll(obj1, obj2) {
+    let poll1 = obj1.value, poll2 = obj2.value;
+    if (poll1 === poll2) return 0;
+    return poll1 > poll2 ? -1 : 1;
 }

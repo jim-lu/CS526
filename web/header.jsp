@@ -42,12 +42,14 @@
         </div>
         <div class="navigation-state">
             <span>STATE</span>
-            <ul class="state-list">
-
-            </ul>
+            <ul class="state-list"></ul>
         </div>
         <div class="navigation-history">
             <span>HISTORY</span>
+            <ul class="history-list">
+                <li class="poll"><a href="lastElection.jsp">Last Election Polls</a></li>
+                <li class="poll"><a href="history.jsp">Past Election Polls</a></li>
+            </ul>
         </div>
         <div class="hidden-navigation-box"></div>
     </div>

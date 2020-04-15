@@ -345,7 +345,27 @@ public class DataProcess {
             row.put("total_vote", lineArr[9]);
             counties.add(row);
         }
-        uploadData("past_election_by_county",counties, databaseUtils);
+        uploadData("past_election_by_county", counties, databaseUtils);
+    }
+
+    public void processHistoryElectionCSV(DatabaseUtils databaseUtils) throws IOException {
+        String fileName = "./resource/1976-2016-president.csv";
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = br.readLine();
+        String[] lineArr;
+        List<Map<String, String>> states = new ArrayList<>();
+        while ((line = br.readLine()) != null) {
+            lineArr = line.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
+            Map<String, String> row = new HashMap<>();
+            row.put("election_year", lineArr[0]);
+            row.put("state_fips", lineArr[3]);
+            row.put("candidate", lineArr[6].length() > 0 ? lineArr[6].replace("\"", "") : "Other");
+            row.put("party", lineArr[7]);
+            row.put("candidate_vote", lineArr[9]);
+            row.put("total_vote", lineArr[10]);
+            states.add(row);
+        }
+        uploadData("history_election", states, databaseUtils);
     }
 
     /**
@@ -456,7 +476,8 @@ public class DataProcess {
 //        dp.getExistingFinalState(set, du);
 //        dp.processFinalData("https://www.realclearpolitics.com/epolls/", set, du);
 
-        dp.processPastElectionByCountyCSV(du);
+//        dp.processPastElectionByCountyCSV(du);
+        dp.processHistoryElectionCSV(du);
         du.close();
     }
 }

@@ -16,7 +16,7 @@ $(function () {
                 let out = false;
                 if (data[0][0].resultSet.length === null || data[0][0].resultSet.length === 0) out = true;
                 let resultSet = data[0][0].resultSet, stateInfo = data[1][0].resultSet[0];
-                let barChartDataSet = [], pieChartDataSet = {};
+                let barChartDataSet = [], pieChartDataTmp = [], pieChartDataSet = {};
                 if (!out) {
                     $(".middle-container h4").text("Starting on: " + stateInfo.start_date);
                     let pollDate = resultSet[resultSet.length - 1].poll_date;
@@ -26,9 +26,17 @@ $(function () {
                         let poll = parseFloat(resultSet[i].poll);
                         if (poll > 0) {
                             barChartDataSet.push({"name": candidate, "value": poll});
-                            pieChartDataSet[candidate] = poll;
+                            pieChartDataTmp.push({"name": candidate, "value": poll});
+                            // pieChartDataSet[candidate] = poll;
                         }
-
+                    }
+                    pieChartDataTmp.sort(comparePoll);
+                    let start = 0, end = pieChartDataTmp.length - 1;
+                    while (start <= end) {
+                        pieChartDataSet[pieChartDataTmp[start].name] = pieChartDataTmp[start].value;
+                        pieChartDataSet[pieChartDataTmp[end].name] = pieChartDataTmp[end].value;
+                        start ++;
+                        end --;
                     }
                 }
 
@@ -45,8 +53,8 @@ $(function () {
                     g.append("g").attr("id", "states").selectAll("path")
                         .data(topojson.feature(json, json.objects.states).features).enter()
                         .append("path").attr("d", path).attr("stroke", "#666").attr("fill", function(d) {
-                            if (d.id === stateInfo.state_fips) return "black";
-                            return "white";
+                            if (d.id === stateInfo.state_fips) return "#ff9933";
+                            return "#ccc";
                         }).call(function() {
                             zoom(topojson.feature(json, json.objects.states).features.filter(function(d) {
                                 return d.id === stateInfo.state_fips;
@@ -114,13 +122,13 @@ $(function () {
                 let pieSvg = d3.select(".pie-container").append("svg").attr("class", "pie-chart")
                     .attr("width", pieChartWidth).attr("height", pieChartHeight)
                     .append("g").attr("transform", "translate(" + pieChartWidth / 2 + "," + pieChartHeight / 2 + ")");
-                let pie = d3.layout.pie().value(function(d) {return d.value});
+                let pie = d3.layout.pie().sort(null).value(function(d) {return d.value});
                 let innerArc = d3.svg.arc().innerRadius(radius * 0.2).outerRadius(radius * 0.5);
                 let outerArc = d3.svg.arc().innerRadius(radius * 0.8).outerRadius(radius * 0.8);
                 let dataReady = pie(d3.entries(pieChartDataSet));
                 pieSvg.selectAll("slices").data(dataReady).enter().append('path').attr('d', innerArc).attr('fill', function(d){
                     return(color(d.data.key));
-                }).attr("stroke", "white").style("stroke-width", "2px").style("opacity", 0.7);
+                }).attr("stroke", "white").style("stroke-width", "2px");
 
                 pieSvg.selectAll('polylines').data(dataReady).enter().append('polyline').attr("stroke", "black")
                     .style("fill", "none").attr("stroke-width", 1).attr("stroke", "#ff9933").attr('points', function(d) {

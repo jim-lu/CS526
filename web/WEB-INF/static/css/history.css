@@ -25,11 +25,11 @@ h4 {
 }
 .left-container {
     width: 75%;
-    height: 500px;
+    height: 700px;
 }
 .right-container {
     width: 25%;
-    height: 500px;
+    height: 700px;
 }
 .title {
     width: 300px;
@@ -127,4 +127,26 @@ h4 {
 svg {
     display: block;
     margin: 0 auto;
+}
+.y.axis line {
+    fill: none;
+}
+.x.axis line {
+    fill: none;
+    stroke: #e0e0e0;
+    shape-rendering: crispEdges;
+}
+.axis path {
+    display: none;
+}
+.brush .extent {
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+}
+.resize {
+    display: inline !important;
+    fill: #7A7A7A;
+    fill-opacity: 1;
+    stroke: #7A7A7A;
+    stroke-width: 2px;
 }

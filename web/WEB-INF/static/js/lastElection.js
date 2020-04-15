@@ -20,7 +20,7 @@ $(function () {
                 countyName = d.county_name, totalVote = d.total_vote;
             // County data
             if (countyFips in countyObj) {
-                countyObj[countyFips].candidate.push({[candidateName]: {vote: candidateVote, color: candidateColor}})
+                countyObj[countyFips].candidate.push({[candidateName]: {vote: candidateVote, color: candidateColor}});
                 if (candidateVote > countyObj[countyFips].winnerVote) {
                     countyObj[countyFips].winner = candidateName;
                     countyObj[countyFips].winnerVote = candidateVote;

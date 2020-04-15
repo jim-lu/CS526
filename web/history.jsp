@@ -18,7 +18,7 @@
 
     <!-- The styles -->
     <style><%@include file="WEB-INF/static/css/common.css"%></style>
-    <style><%@include file="WEB-INF/static/css/lastElection.css"%></style>
+    <style><%@include file="WEB-INF/static/css/history.css"%></style>
 
 </head>
 
@@ -27,23 +27,14 @@
 <div class="container">
     <jsp:include page="header.jsp" />
     <div class="main">
-        <div class="middle-container clearfix">
-            <h2>2016 PRESIDENTIAL ELECTION POLL</h2>
-            <div class="left-container">
-                <div class="map-container"></div>
-            </div>
-            <div class="right-container">
-                <div class="big-bar-chart-container">
-                    <h3>Final Result</h3>
-                    <ul class="title clearfix">
-                        <li class="candidate">Candidate</li>
-                        <li class="vote">Votes</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="middle-container">
+            <h2></h2>
+            <p><select class="selection"></select></p>
+            <div class="map-container"></div>
         </div>
         <div class="middle-container">
-            <ul class="bar-chart-container clearfix"></ul>
+            <h3>Final Result</h3>
+            <div class="big-bar-chart-container"></div>
         </div>
     </div>
     <jsp:include page="footer.jsp" />
@@ -53,7 +44,7 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/topojson.v1.min.js"></script>
     <script><%@include file="WEB-INF/static/js/common.js"%></script>
-    <script><%@include file="WEB-INF/static/js/lastElection.js"%></script>
+    <script><%@include file="WEB-INF/static/js/history.js"%></script>
 </div>
 
 </body>

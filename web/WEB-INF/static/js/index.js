@@ -1,5 +1,5 @@
 $(function () {
-    const candidateList = $('.candidate-list')
+    const candidateList = $('.candidate-list');
 
     const candidates = (function() {
         let res = {publican: [], democratic: []};
@@ -146,12 +146,6 @@ $(function () {
                 .style("stroke-width", 1.5 / s + "px");
         }
     });
-
-    function comparePoll(obj1, obj2) {
-        let poll1 = obj1.value, poll2 = obj2.value;
-        if (poll1 === poll2) return 0;
-        return poll1 > poll2 ? -1 : 1;
-    }
 
     // $('#map').usmap({
     //     stateStyles: {fill: 'grey'},
