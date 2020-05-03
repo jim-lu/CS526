@@ -11,7 +11,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Index</title>
+    <title>History</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -30,6 +30,15 @@
         <div class="middle-container">
             <h2></h2>
             <p><select class="selection"></select></p>
+            <div class="numbers clearfix">
+                <h4>States Support</h4>
+                <div class="number-1"></div>
+                <div class="number-2"></div>
+            </div>
+            <div class="labels clearfix">
+                <div class="label-1"><span class="red"></span><span>&nbsp;&nbsp;Republican</span></div>
+                <div class="label-2"><span class="blue"></span><span>&nbsp;&nbsp;Democratic</span></div>
+            </div>
             <div class="map-container"></div>
         </div>
         <div class="middle-container">
@@ -41,6 +50,7 @@
 
     <!-- JS -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/topojson.v1.min.js"></script>
     <script><%@include file="WEB-INF/static/js/common.js"%></script>

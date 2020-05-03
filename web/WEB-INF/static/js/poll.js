@@ -181,17 +181,17 @@ $(function () {
         context.append("g").attr("class", "x axis").attr("transform", "translate(0," + contextHeight + ")").call(xAxis2);
         context.append("g").attr("class", "x brush").call(brush).selectAll("rect").attr("y", -6).attr("height", contextHeight + 7);
 
-        let mouseG = svg.append("g").attr("class", "mouse-over-effects").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        mouseG.append("path").attr("class", "mouse-line").style("stroke", "black").style("stroke-width", 1);
+        let mouseEffect = svg.append("g").attr("class", "mouse-over-effects").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        mouseEffect.append("path").attr("class", "mouse-line").style("stroke", "black").style("stroke-width", 1);
         const lines = $(".line");
-        let mousePerLine = mouseG.selectAll(".mouse-per-line").data(polls).enter().append("g").attr("class", function (d) {
+        let mousePerLine = mouseEffect.selectAll(".mouse-per-line").data(polls).enter().append("g").attr("class", function (d) {
             return "mouse-per-line " + labelToClass(d.name);
         });
         mousePerLine.append("circle").attr("r", 5).style("stroke", function (d) {
             return color(d.name);
         }).style("fill", "none").style("stroke-width", 1).style("opacity", 0);
         mousePerLine.append("text").attr("transform", "translate(10, 3)");
-        mouseG.append("svg:rect").attr("width", width).attr("height", height).attr("fill", "none").attr("pointer-events", "all").on("mouseover", function () {
+        mouseEffect.append("svg:rect").attr("width", width).attr("height", height).attr("fill", "none").attr("pointer-events", "all").on("mouseover", function () {
             d3.select(".mouse-line").style("opacity", "1");
             d3.selectAll(".mouse-per-line circle").style("opacity", "1");
             d3.selectAll(".mouse-per-line text").style("opacity", "1");

@@ -163,7 +163,7 @@ $(function () {
         showBottomBarChart(stateObj, true);
 
         function clicked(d) {
-            if (d.id === "2") return;
+            if (d !== undefined && d.id === "2") return;
             if (d3.select('.background').node() === this) return reset();
             if (active.node() === this) return reset();
             active.classed("active", false);
@@ -185,7 +185,7 @@ $(function () {
 
         function showBottomBarChart(dataObj, state) {
             barChartContainer.empty();
-            console.log(dataObj);
+            // console.log(dataObj);
             if (state) {
                 for (let key in dataObj) {
                     if(stateMap[key].state_name === undefined) continue;
@@ -234,10 +234,7 @@ $(function () {
             }).attr("fill", function (d, i) {
                 if (!state) {
                     let ele = dataObj[key].candidate[2 - i];
-                    // console.log(d.name);
-                    // console.log(dataObj[key].candidate[2 - i]);
-                    // console.log(dataObj[key].candidate[2 - i][d.name]);
-                    console.log(dataObj[key].candidate[2 - i][Object.keys(ele)[0]]);
+                    // console.log(dataObj[key].candidate[2 - i][Object.keys(ele)[0]]);
                     return dataObj[key].candidate[2 - i][Object.keys(ele)[0]].color;
                 }
                 return dataObj[key][d.name].color;

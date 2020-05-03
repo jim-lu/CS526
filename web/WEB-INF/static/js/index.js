@@ -55,7 +55,7 @@ $(function () {
             pollMap[d.state_po] = [];
         });
         candidateInfo.forEach(function (d, i) {
-            if (d.candidate_status === 1) candidateColor[d.candidate_name.split(" ")[1]] = color[i];
+            if (d.candidate_name === "Joseph Biden" || d.candidate_name === "Bernie Sanders") candidateColor[d.candidate_name.split(" ")[1]] = color[i];
         });
         let index = statePoll.length - 1;
         let pollDate = statePoll[index].poll_date, state = statePoll[index].state,
@@ -146,9 +146,4 @@ $(function () {
                 .style("stroke-width", 1.5 / s + "px");
         }
     });
-
-    // $('#map').usmap({
-    //     stateStyles: {fill: 'grey'},
-    //     stateHoverStyles: {fill: 'white'}
-    // });
 });

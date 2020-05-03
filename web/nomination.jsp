@@ -58,6 +58,7 @@
 
     <!-- JS -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script><%@include file="WEB-INF/static/js/common.js"%></script>

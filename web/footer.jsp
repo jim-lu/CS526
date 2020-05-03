@@ -7,5 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="footer">
-    <p style="text-align: center; padding: 20px 0;">Data Source: <a href="https://www.realclearpolitics.com/">RealClear Politics</a></p>
+    <p style="text-align: center; padding: 20px 0;">
+        Data Source:
+        <a href="https://www.realclearpolitics.com/">RealClear Politics</a> |
+        <a href="https://electionlab.mit.edu/data">MIT ELECTION LAB</a>
+    </p>
 </div>

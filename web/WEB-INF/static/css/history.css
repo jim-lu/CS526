@@ -19,6 +19,7 @@ h4 {
     height: 30px;
     line-height: 30px;
     font-size: 20px;
+    text-align: center;
 }
 .left-container, .right-container {
     float: left;
@@ -149,4 +150,62 @@ svg {
     fill-opacity: 1;
     stroke: #7A7A7A;
     stroke-width: 2px;
+}
+.labels {
+    width: 300px;
+    height: 20px;
+    margin: 10px auto;
+}
+.numbers {
+    width: 300px;
+    height: 80px;
+    margin: 0 auto;
+}
+.label-1 {
+    float: left;
+    width: 50%;
+    height: 20px;
+    line-height: 20px;
+}
+.label-2 {
+    float: right;
+    width: 50%;
+    height: 20px;
+    line-height: 20px;
+}
+.number-1 {
+    float: left;
+    width: 50%;
+    height: 50px;
+    line-height: 50px;
+    color: #ff0000;
+    font-size: 24px;
+    text-align: center;
+}
+.number-2 {
+    float: right;
+    width: 50%;
+    height: 50px;
+    line-height: 50px;
+    color: #0000cc;
+    font-size: 24px;
+    text-align: center;
+}
+span.red {
+    width: 20px;
+    height: 20px;
+    float: left;
+    display: inline-block;
+    background-color: #ff0000;
+}
+span.blue {
+    width: 20px;
+    height: 20px;
+    float: left;
+    display: inline-block;
+    background-color: #0000cc;
+}
+span {
+    display: inline-block;
+    float: left;
 }

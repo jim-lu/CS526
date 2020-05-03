@@ -14,7 +14,10 @@ $(function () {
         success: function (data) {
             if (data[0][0].msg === 'Query completed!' && data[1][0].msg === 'Query completed!') {
                 let out = false;
-                if (data[0][0].resultSet.length === null || data[0][0].resultSet.length === 0) out = true;
+                if (data[0][0].resultSet.length === null || data[0][0].resultSet.length === 0) {
+                    $(".middle-container h4").text("Not started yet.");
+                    out = true;
+                }
                 let resultSet = data[0][0].resultSet, stateInfo = data[1][0].resultSet[0];
                 let barChartDataSet = [], pieChartDataTmp = [], pieChartDataSet = {};
                 if (!out) {
@@ -27,7 +30,6 @@ $(function () {
                         if (poll > 0) {
                             barChartDataSet.push({"name": candidate, "value": poll});
                             pieChartDataTmp.push({"name": candidate, "value": poll});
-                            // pieChartDataSet[candidate] = poll;
                         }
                     }
                     pieChartDataTmp.sort(comparePoll);
@@ -137,14 +139,11 @@ $(function () {
                         let posC = outerArc.centroid(d);
                         console.log(posA, posB, posC);
                         let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                        // posB[1] = (Math.pow(Math.abs(posB[1]), 1.3) - Math.abs(posB[1]) * 3.4 + Math.abs(posB[1]) / 100 * 10) * (posB[1] < 0 ? -1 : 1);
                         posC[0] = radius * 0.85 * (midangle < Math.PI ? 1 : -1);
-                        // posC[1] = (Math.pow(Math.abs(posC[1]), 1.3) - Math.abs(posC[1]) * 3.4 + Math.abs(posC[1]) / 100 * 10) * (posC[1] < 0 ? -1 : 1);
                         if (Math.abs(posB[1]) > 150) {
                             posB[1] = Math.pow(2, Math.abs(posB[1]) / 25) * (posB[1] < 0 ? -1 : 1);
                             posC[1] = Math.pow(2, Math.abs(posC[1]) / 25) * (posC[1] < 0 ? -1 : 1);
                         }
-                        // console.log(posA, posB, posC);
                         return [posA, posB, posC]
                     });
                 pieSvg.selectAll('labels').data(dataReady).enter().append('text').text( function(d) {
@@ -154,7 +153,6 @@ $(function () {
                     let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
                     console.log(pos);
                     pos[0] = radius * 0.85 * (midangle < Math.PI ? 1 : -1);
-                    // pos[1] = (Math.pow(Math.abs(pos[1]), 1.3) - Math.abs(pos[1]) * 3.2 + Math.abs(pos[1]) / 100 * 5) * (pos[1] < 0 ? -1 : 1);
                     if (Math.abs(pos[1]) > 150) pos[1] = Math.pow(2, Math.abs(pos[1]) / 25) * (pos[1] < 0 ? -1 : 1);
                     return 'translate(' + pos + ')';
                 }).style('text-anchor', function(d) {

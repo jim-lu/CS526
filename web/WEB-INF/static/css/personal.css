@@ -1,0 +1,99 @@
+.left-container {
+    width: 20%;
+    float: left;
+    border: 1px solid #ccc;
+}
+.right-container {
+    width: 78%;
+    float: right;
+    border: 1px solid #ccc;
+}
+.user-head-img {
+    width: 100%;
+    padding: 20px 0;
+    background: linear-gradient(to bottom, #003366 50%, #fff 50%);
+}
+.head-img-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 150px;
+    border: 2px solid #fff;
+    background-color: #fff;
+    margin: 0 auto;
+}
+.head-img-container img {
+    width: 150px;
+    height: 150px;
+    display: block;
+    border-radius: 150px;
+
+}
+.row {
+    width: 100%;
+}
+.left, .right {
+    height: 30px;
+    line-height: 30px;
+    float: left;
+}
+.left {
+    width: 40%;
+    text-align: right;
+}
+.right {
+    width: 60%;
+}
+h2 {
+    height: 50px;
+    line-height: 50px;
+    font-size: 30px;
+    text-indent: 20px;
+}
+h3 {
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    text-indent: 20px;
+}
+p {
+    text-indent: 20px;
+    line-height: 30px;
+    height: 30px;
+}
+.choose-box {
+    width: 400px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 100px;
+}
+.submit-button {
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    margin: 20px 0 20px 200px;
+}
+.site-poll-list {
+    margin-left: 50px;
+}
+.site-poll-list li {
+    margin-bottom: 20px;
+}
+.table-name, .poll-name {
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.site-poll-name {
+    display: block;
+    float: left;
+}
+.title {
+    width: 200px;
+    float: left;
+}
+.description {
+    width: 80%;
+    margin: 0 auto;
+    word-wrap: break-word;
+}

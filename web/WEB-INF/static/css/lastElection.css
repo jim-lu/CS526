@@ -1,5 +1,5 @@
 .middle-container {
-    width: 95%;
+    width: 98%;
     margin: 20px auto 0;
     padding: 20px 0;
 }
@@ -50,7 +50,7 @@ h4 {
     width: 60%;
 }
 .big-bar-chart-container {
-    width: 98%;
+    width: 100%;
     border: 1px solid #ff9933;
     border-radius: 5px;
     margin: 0 auto;

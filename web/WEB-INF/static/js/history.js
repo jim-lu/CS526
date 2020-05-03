@@ -36,7 +36,7 @@ $(function () {
                 let resultSet = data[0].resultSet;
                 let color = {"republican": "#f00", "democrat": "#00c", "green": "#090"}, parties = new Set(Object.keys(color));
                 let colorMap = {}, stateMap = {};
-                let stateObj = {}, totalObj = {};
+                let stateObj = {}, totalObj = {}, winningObj = {};
                 resultSet.forEach(function (d) {
                     let stateFips = d.state_fips, candidateVote = parseInt(d.candidate_vote), party = d.party.toLowerCase();
                     let candidateName = d.candidate.split(",")[0];
@@ -63,10 +63,25 @@ $(function () {
                         stateMap[stateFips] = {state_name: d.state_name, total_vote: candidateVote}
                     }
                 });
-                console.log(stateObj);
-                console.log(stateMap);
+                // console.log(stateObj);
+                // console.log(stateMap);
+                let support = {"#f00": 0, "#00c": 0};
+                Object.keys(stateObj).forEach(function (id) {
+                    let winnerVote = -1, winnerColor;
+                    for (let key in stateObj[id]) {
+                        if (stateObj[id][key].vote > winnerVote) {
+                            winnerVote = stateObj[id][key].vote;
+                            winnerColor = stateObj[id][key].color;
+                        }
+                    }
+                    support[winnerColor] += 1;
+                    winningObj[id] = winnerColor;
+                });
                 drawMap(stateObj, stateMap);
                 drawBarChart(totalObj);
+                // console.log(support);
+                $(".number-1").text(support[color["republican"]]);
+                $(".number-2").text(support[color["democrat"]]);
             }
         });
     }
@@ -134,7 +149,7 @@ $(function () {
     }
 
     function drawBarChart(totalObj) {
-        let bigBarChartData = [], svg, defs, bigXScale, smallXScale, bigYScale, smallYScale, bigYAxis, yZoom, textScale, brush, brushSetUp;
+        let bigBarChartData = [], svg, defs, bigXScale, smallXScale, bigYScale, smallYScale, bigXAxis, bigYAxis, yZoom, textScale, brush, brushSetUp;
         Object.keys(totalObj).forEach(function (k, i) {bigBarChartData.push({"name": k, "value": totalObj[k].vote, "key": i});});
         bigBarChartData = bigBarChartData.sort(function (a, b) {return d3.descending(a.value, b.value);});
         console.log(bigBarChartData);
@@ -161,6 +176,7 @@ $(function () {
             bigYScale = d3.scale.ordinal().rangeBands([0, bigHeight], 0.4, 0);
             smallYScale = d3.scale.ordinal().rangeBands([0, smallHeight], 0.4, 0);
             yZoom = d3.scale.linear().range([0, bigHeight]).domain([0, bigHeight]);
+            bigXAxis = d3.svg.axis().scale(bigXScale).orient("bottom").ticks(5).innerTickSize(-bigHeight).outerTickSize(0).tickPadding(10);
             bigYAxis = d3.svg.axis().scale(bigYScale).orient("left").tickSize(0);
             d3.select(".big-group-wrapper").append("g").attr("class", "x axis").attr("transform", "translate(0, " + (bigHeight + 5) + ")");
             bigGroup.append("g").attr("class", "y axis").attr("transform", "translate(-5, 0)");
@@ -236,6 +252,7 @@ $(function () {
             d3.select(".big-group").select(".y.axis").call(bigYAxis);
             let newMaxX = d3.max(bigBarChartData, function (d) {return selectedBars.indexOf(d.name) > -1 ? d.value : 0;});
             bigXScale.domain([0, newMaxX]);
+            d3.select(".big-group-wrapper").select(".x.axis").transition().duration(50).call(bigXAxis);
             update();
         }
 
